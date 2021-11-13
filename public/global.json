@@ -1,0 +1,5 @@
+{
+  "baseUrl": "frontend address",
+  "backUrl": "http://localhost:8000/api/v1/",
+  "search_url": "https://zewan.cc/"
+}

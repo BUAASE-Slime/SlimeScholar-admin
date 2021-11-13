@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+// import user from "@/store/user";
 
 Vue.use(VueRouter)
 
@@ -8,15 +8,17 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: () => import('../views/Home')
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: '/user',
+    name: 'Login',
+    component: () => import('../views/user/Login'),
+  },
+  {
+    path: '/messages',
+    name: 'Messages',
+    component: () => import('../views/messages/Messages'),
   }
 ]
 
@@ -25,5 +27,21 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+// router.beforeEach((to, from, next) => {
+  // const userInfo = user.getters.getUser(user.state());
+  // console.log(userInfo.user.Authorization);
+  // Record the router address of page accessed before user
+  // if (to.path === '/login') {
+    // localStorage.setItem("preRoute", router.currentRoute.fullPath);
+  // }
+  // Login is required to access the following pages
+  // if (!userInfo) {
+  //   next({
+  //     name: 'Login',
+  //   })
+  // }
+  // next()
+// })
 
 export default router
