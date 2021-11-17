@@ -8,6 +8,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
 
 import user from "./store/user";
+import da from "element-ui/src/locale/lang/da";
 
 Vue.config.productionTip = false
 
@@ -15,8 +16,9 @@ Vue.config.productionTip = false
 Vue.prototype.$axios = axios;
 
 // read data from public/global.json and mount it globally
-axios.get('./global.json').then((data) => {
+axios.get('/global.json').then((data) => {
   Vue.prototype.GLOBAL = data.data;
+  console.log(data.data);
   axios.defaults.baseURL = data.data.backUrl;
 })
 

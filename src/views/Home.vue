@@ -1,12 +1,12 @@
 <template>
   <div class="home">
-    <h1>这里是主页</h1>
+    <h1>主页</h1>
   </div>
 </template>
 
 <script>
 export default {
-  name: "HomePage"
+  name: "HomePage",
 }
 </script>
 

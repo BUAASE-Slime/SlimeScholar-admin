@@ -19,7 +19,21 @@ const routes = [
     path: '/messages',
     name: 'Messages',
     component: () => import('../views/messages/Messages'),
-  }
+  },
+  {
+    path: '/center',
+    name: "Center",
+    props: true,
+    component: () => import('../views/manager/Center'),
+    children: [
+      {
+        path: 'statistic',
+        name: 'Statistic',
+        props: true,
+        components: () => import('../views/manager/components/Statistic')
+      }
+    ]
+  },
 ]
 
 const router = new VueRouter({
@@ -28,20 +42,25 @@ const router = new VueRouter({
   routes
 })
 
-// router.beforeEach((to, from, next) => {
+router.beforeEach((to, from, next) => {
   // const userInfo = user.getters.getUser(user.state());
   // console.log(userInfo.user.Authorization);
   // Record the router address of page accessed before user
   // if (to.path === '/login') {
     // localStorage.setItem("preRoute", router.currentRoute.fullPath);
   // }
+  if (to.path === '/') {
+    next({
+      name: 'Statistic'
+    })
+  }
   // Login is required to access the following pages
   // if (!userInfo) {
   //   next({
   //     name: 'Login',
   //   })
   // }
-  // next()
-// })
+  next()
+})
 
 export default router
