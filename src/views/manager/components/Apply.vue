@@ -76,6 +76,17 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination layout="sizes, prev, pager, next, jumper"
+                     background
+                     :current-page="currentPage"
+                     :page-size="pageSize"
+                     :page-sizes="pageSizes"
+                     :total="tableData.length"
+                     @size-change="handleSizeChange"
+                     @current-change="handleCurrentChange"
+                     style="margin-top: 20px"
+                     v-if="!loading">
+      </el-pagination>
     </div>
   </div>
 </template>
@@ -174,7 +185,17 @@ export default {
         return 'text-align: center; cursor: pointer';
       else
         return 'text-align: center;';
-    }
+    },
+    // pagination
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+      this.currentPage = 1;
+      this.pageSize = val;
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+      this.currentPage = val;
+    },
   }
 }
 </script>
