@@ -11,7 +11,6 @@
         <el-menu-item index="3-2" class="big-item" @click="logout">退出</el-menu-item>
       </el-submenu>
       <i v-if="isLogin" class="el-icon-user"></i>
-      <i v-if="isLogin" class="el-icon-bell" @click="openNews"></i>
       <div class="login-button">
         <el-button index="3" style="float: right" v-if="!isLogin" type="primary" @click="login">登录</el-button>
       </div>
@@ -79,9 +78,6 @@ export default {
     },
     login() {
       this.$router.push('/user');
-    },
-    openNews() {
-      this.$router.push('/messages');
     },
     logout() {
       this.$axios({
