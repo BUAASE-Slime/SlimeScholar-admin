@@ -72,6 +72,14 @@ a {
   box-shadow: 0 2px 4px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .04);
 }
 
+.center .aside >>> .el-menu-item {
+  font-size: 17px;
+}
+
+.center .aside >>> .el-menu-item.is-active {
+  font-weight: bold;
+}
+
 .center .main-body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .04);
   background-color: white;
