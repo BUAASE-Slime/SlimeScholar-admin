@@ -24,10 +24,10 @@
           <div class="left">
             <span class="title">
               <i class="el-icon-odometer"></i>
-              &nbsp;&nbsp;检索响应时间
+              &nbsp;&nbsp;平均响应时间
             </span>
           </div>
-          <div id="time-chart"></div>
+          <div id="time-chart" style="width: 400px; height: 400px;"></div>
         </div>
       </el-col>
       <el-col :span="12">
@@ -39,6 +39,7 @@
                 &nbsp;&nbsp;平台活跃指数
               </span>
             </div>
+            <div id="active-chart" style="width: 400px; height: 370px;"></div>
           </div>
         </div>
       </el-col>
@@ -56,16 +57,30 @@ export default {
         userCount: 350,
         literCount: 100000,
         authorCount: 5000,
-        memberCount: 345
-      }
-    }
-  },
-  methods: {
-    gotoMem() {
-      this.$emit('handleSelect', '3');
-    },
-    showTimeChart() {
-      let timeChart = this.$echarts.init(document.getElementById('time-chart'));
+        memberCount: 345,
+
+        responseTime: 310,
+        activeIndex: [
+          ['2021-10-10', 200],
+          ['2021-10-11', 560],
+          ['2021-10-12', 750],
+          ['2021-10-13', 580],
+          ['2021-10-14', 250],
+          ['2021-10-15', 300],
+          ['2021-10-16', 450],
+          ['2021-10-17', 300],
+          ['2021-10-18', 100],
+          ['2021-10-19', 200],
+          ['2021-10-20', 560],
+          ['2021-10-21', 750],
+          ['2021-10-22', 580],
+          ['2021-10-23', 250],
+          ['2021-10-24', 300],
+          ['2021-10-25', 450],
+          ['2021-10-26', 300],
+          ['2021-10-27', 100],
+        ]
+      },
     }
   },
   created() {
@@ -73,7 +88,128 @@ export default {
     this.info.literCount = this.info.literCount.toLocaleString();
     this.info.authorCount = this.info.authorCount.toLocaleString();
     this.info.memberCount = this.info.memberCount.toLocaleString();
-  }
+  },
+  mounted() {
+    //页面加载完成后,才执行
+    setTimeout(() => {
+      this.showTimeChart();
+      this.showActiveChart();
+    }, 1000);
+  },
+  methods: {
+    gotoMem() {
+      this.$emit('handleSelect', '3');
+    },
+    showTimeChart() {
+      let timeChart = this.$echarts.init(document.getElementById('time-chart'));
+      timeChart.setOption({
+        series: [
+          {
+            min: 0,
+            max: 500,
+            type: 'gauge',
+            progress: {
+              show: true,
+              width: 15
+            },
+            axisLine: {
+              lineStyle: {
+                width: 15
+              }
+            },
+            axisTick: {
+              show: false
+            },
+            splitLine: {
+              length: 10,
+              lineStyle: {
+                width: 2,
+                color: '#999'
+              }
+            },
+            axisLabel: {
+              distance: 25,
+              color: '#999',
+              fontSize: 12
+            },
+            anchor: {
+              show: true,
+              showAbove: true,
+              size: 15,
+              itemStyle: {
+                borderWidth: 5
+              }
+            },
+            title: {
+              show: false
+            },
+            detail: {
+              valueAnimation: true,
+              fontSize: 25,
+              offsetCenter: [0, '70%'],
+              formatter: function (value) {
+                return value + 'ms';
+              }
+            },
+            data: [
+              {
+                value: this.info.responseTime
+              }
+            ]
+          }
+        ]
+      });
+    },
+    showActiveChart() {
+      let activeChart = this.$echarts.init(document.getElementById('active-chart'));
+      activeChart.setOption({
+        tooltip: {
+          trigger: 'axis',
+          position: function (pt) {
+            return [pt[0], '10%'];
+          }
+        },
+        // toolbox: {
+        //   feature: {
+        //     dataZoom: {
+        //       yAxisIndex: 'none'
+        //     },
+        //     restore: {},
+        //     saveAsImage: {}
+        //   }
+        // },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false
+        },
+        yAxis: {
+          type: 'value',
+          boundaryGap: [0, '100%']
+        },
+        dataZoom: [
+          {
+            type: 'inside',
+            start: 0,
+            end: 20
+          },
+          {
+            start: 0,
+            end: 20
+          }
+        ],
+        series: [
+          {
+            name: '活跃指数',
+            type: 'line',
+            smooth: true,
+            symbol: 'none',
+            areaStyle: {},
+            data: this.info.activeIndex,
+          }
+        ]
+      });
+    }
+  },
 }
 </script>
 
