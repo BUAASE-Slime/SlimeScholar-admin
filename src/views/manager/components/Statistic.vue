@@ -165,9 +165,9 @@ export default {
       activeChart.setOption({
         tooltip: {
           trigger: 'axis',
-          position: function (pt) {
-            return [pt[0], '10%'];
-          }
+          // position: function (pt) {
+          //   return [pt[0], '10%'];
+          // }
         },
         // toolbox: {
         //   feature: {
@@ -189,12 +189,12 @@ export default {
         dataZoom: [
           {
             type: 'inside',
-            start: 0,
-            end: 20
+            start: 60,
+            end: 100
           },
           {
             start: 0,
-            end: 20
+            end: 100
           }
         ],
         series: [
