@@ -8,7 +8,7 @@
               <el-button plain icon="el-icon-circle-check" @click="acceptAll">一键通过</el-button>
             </el-tooltip>
             <el-tooltip class="item" effect="light" content="一键拒绝所选入驻申请" placement="top-start">
-              <el-button plain icon="el-icon-circle-close" @click="acceptAll">一键拒绝</el-button>
+              <el-button plain icon="el-icon-circle-close" @click="refuseAll">一键拒绝</el-button>
             </el-tooltip>
             <el-tooltip class="item" effect="light" content="筛选通过文献作者与申请人姓名相同的申请" placement="top-start">
               <el-button plain icon="el-icon-view" @click="acceptCheck">筛选通过</el-button>
@@ -129,12 +129,34 @@ export default {
     },
     refuse(index) {
       console.log("refuse " + this.tableData[index].author_name);
+      this.$confirm('此操作将拒绝 ' + this.tableData[index].author_name + ' 的入驻申请, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+      });
     },
     acceptAll() {
 
     },
     acceptCheck() {
 
+    },
+    refuseAll() {
+      this.$confirm('此操作将拒绝所选申请, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+      });
     },
     // link
     checkDetail(apply_id) {
