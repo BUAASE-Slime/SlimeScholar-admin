@@ -1,6 +1,8 @@
 <template>
   <div class="statistic">
-    <h1>信息统计</h1>
+    <el-row>
+      <h1>信息统计</h1>
+    </el-row>
   </div>
 </template>
 

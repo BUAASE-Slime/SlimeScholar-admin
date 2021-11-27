@@ -71,7 +71,8 @@ export default {
       console.log(key, keyPath);
     },
     gotoHome: function () {
-      this.$router.push('/');
+      if (this.$route.path !== '/')
+        this.$router.push('/');
     },
     SlimeSearch: function () {
       window.open(this.GLOBAL.search_url, "_blank");
@@ -204,7 +205,6 @@ export default {
 
 .header .el-menu--horizontal>.el-menu-item.is-active {
   border-bottom: 2px solid transparent;
-  color: #409EFF !important;
 }
 
 .header .el-menu-item {
