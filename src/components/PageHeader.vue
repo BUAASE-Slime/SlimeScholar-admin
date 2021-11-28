@@ -74,7 +74,7 @@ export default {
         this.$router.push('/');
     },
     SlimeSearch: function () {
-      window.open(this.GLOBAL.search_url, "_blank");
+      window.open(this.GLOBAL.searchUrl, "_blank");
     },
     login() {
       this.$router.push('/user');

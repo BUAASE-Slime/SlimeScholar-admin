@@ -171,7 +171,11 @@ export default {
     },
     // link
     checkDetail(apply_id) {
-      console.log(apply_id);
+      let routeUrl = this.$router.resolve({
+        path: '/apply_detail',
+        query: { v: apply_id }
+      });
+      window.open(routeUrl .href, '_blank');
     },
     // table
     handleSelectionChange(val) {
