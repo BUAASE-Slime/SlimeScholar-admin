@@ -45,12 +45,12 @@
             min-width="200">
         </el-table-column>
         <el-table-column
-            prop="affiliation"
+            prop="affiliation_name"
             label="所在机构"
             min-width="180">
         </el-table-column>
         <el-table-column
-            prop="apply_time"
+            prop="created_time"
             label="申请时间"
             min-width="150"
         >
@@ -103,32 +103,32 @@ export default {
       pageSizes: [7,10,15],
       tableData: [
         {
-          apply_id: 1,
+          submit_id: 1,
           author_name: 'Zehuan Huang',
           email: 'huangzehuan@buaa.edu.cn',
-          affiliation: 'Beihang University',
-          apply_time: '2021/11/28 10:03'
+          affiliation_name: 'Beihang University',
+          created_time: '2021/11/28 10:03'
         },
         {
-          apply_id: 2,
+          submit_id: 2,
           author_name: 'Yu Li',
           email: 'liyu@buaa.edu.cn',
-          affiliation: 'Beihang University',
-          apply_time: '2021/11/28 20:03'
+          affiliation_name: 'Beihang University',
+          created_time: '2021/11/28 20:03'
         },
         {
-          apply_id: 3,
+          submit_id: 3,
           author_name: 'Qin Zhou',
           email: 'zhouqin@buaa.edu.cn',
-          affiliation: 'Beihang University',
-          apply_time: '2021/11/29 20:03'
+          affiliation_name: 'Beihang University',
+          created_time: '2021/11/29 20:03'
         },
         {
-          apply_id: 4,
+          submit_id: 4,
           author_name: 'Qin Zhou',
           email: 'zhouqin@buaa.edu.cn',
-          affiliation: 'Beihang University',
-          apply_time: '2021/11/29 20:03'
+          affiliation_name: 'Beihang University',
+          created_time: '2021/11/29 20:03'
         }
       ],
       multipleSelection: [],
@@ -170,10 +170,10 @@ export default {
       });
     },
     // link
-    checkDetail(apply_id) {
+    checkDetail(submit_id) {
       let routeUrl = this.$router.resolve({
         path: '/apply_detail',
-        query: { v: apply_id }
+        query: { v: submit_id }
       });
       window.open(routeUrl .href, '_blank');
     },
@@ -182,7 +182,7 @@ export default {
       this.multipleSelection = val;
     },
     goClick(row) {
-      this.checkDetail(row.apply_id);
+      this.checkDetail(row.submit_id);
     },
     cellStyle(row) {
       if (row.column.label === '姓名')

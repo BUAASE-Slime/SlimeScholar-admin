@@ -1,7 +1,7 @@
 <template>
   <div class="center">
     <el-container>
-      <el-aside width="350px">
+      <el-aside width="300px">
         <div class="aside">
           <el-menu
               default-active="1"
@@ -67,7 +67,7 @@ a {
 }
 
 .center .aside {
-  margin-left: 100px;
+  margin-left: 50px;
   margin-top: 50px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .04);
 }
@@ -84,7 +84,7 @@ a {
   box-shadow: 0 2px 4px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .04);
   background-color: white;
   width: 900px;
-  margin-left: 60px;
+  margin-left: 30px;
   margin-top: 30px;
   padding: 30px 50px;
 }

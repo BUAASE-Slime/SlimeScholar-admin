@@ -14,7 +14,7 @@
               <i class="el-icon-user"></i>
               姓名
             </template>
-            {{ info.name }}
+            {{ info.author_name }}
           </el-descriptions-item>
           <el-descriptions-item>
             <template slot="label">
@@ -28,7 +28,7 @@
               <i class="el-icon-office-building"></i>
               所在机构
             </template>
-            {{ info.affiliation }}
+            {{ info.affiliation_name }}
           </el-descriptions-item>
           <el-descriptions-item>
             <template slot="label">
@@ -42,7 +42,9 @@
               <i class="el-icon-data-analysis"></i>
               领域
             </template>
-            {{ info.main_areas }}
+            <span v-for="(field, i) in info.fields" v-bind:key="i">
+              {{ field }}<span v-if="i<info.fields.length-1">, </span>
+            </span>
           </el-descriptions-item>
         </el-descriptions>
       </div>
@@ -66,7 +68,13 @@
                     <span>{{ article.paper_title }}</span>
                   </div>
                   <div class="author _info">
-                    <span>{{ article.authors }}&nbsp;·&nbsp;{{ article.publisher }}&nbsp;·&nbsp;{{ article.year }}</span>
+                    <span>
+                      <span v-for="(aut, i) in article.authors">
+                        {{ aut.author_name }}
+                        <span v-if="i<article.authors.length-1"> / </span>
+                      </span>
+                      &nbsp;·&nbsp;{{ article.publisher }}&nbsp;·&nbsp;{{ article.year }}
+                    </span>
                   </div>
                 </el-col>
               </el-row>
@@ -86,30 +94,75 @@ export default {
       apply_id: 'apply_id',
 
       info: {
-        name: 'Zehuan Huang',
+        author_name: 'Zehuan Huang',
         email: 'huangzehuan@buaa.edu.cn',
-        affiliation: 'Beihang University',
-        main_areas: 'Computer Vision, Computer Graphics',
+        affiliation_name: 'Beihang University',
+        fields: ['Computer Vision', 'Computer Graphics'],
         homepage: 'https://blog.zewan.cc/',
         papers: [
           {
             paper_id: '12312342',
             paper_title: 'Aesthetic image enhancement by dependence-aware object recomposition',
-            authors: 'FL Zhang / M Wang / SM Hu',
+            authors: [
+              {
+                affiliation_id: "",
+                affiliation_name: "Independent Researcher",
+                author_id: "3192512793",
+                author_name: "Sergei Belousov",
+                order: "1"
+              },
+              {
+                affiliation_id: "",
+                affiliation_name: "Independent Researcher",
+                author_id: "3192512793",
+                author_name: "Sergei Belousov",
+                order: "1"
+              }
+            ],
             publisher: 'Elsevier BV',
             year: '2021'
           },
           {
             paper_id: '12312342',
             paper_title: 'PatchNet: a patch-based image representation for interactive library-driven image editing',
-            authors: 'SM Hu / FL Zhang / M Wang / RR Martin / J Wang',
+            authors: [
+              {
+                affiliation_id: "",
+                affiliation_name: "Independent Researcher",
+                author_id: "3192512793",
+                author_name: "Sergei Belousov",
+                order: "1"
+              },
+              {
+                affiliation_id: "",
+                affiliation_name: "Independent Researcher",
+                author_id: "3192512793",
+                author_name: "Sergei Belousov",
+                order: "1"
+              }
+            ],
             publisher: 'Elsevier BV',
             year: '2021'
           },
           {
             paper_id: '12312342',
             paper_title: 'Example-guided style-consistent image synthesis from semantic labeling',
-            authors: 'M Wang / GY Yang / RL Li / R Liang / SH Zhang / P Hall / SM Hu',
+            authors: [
+              {
+                affiliation_id: "",
+                affiliation_name: "Independent Researcher",
+                author_id: "3192512793",
+                author_name: "Sergei Belousov",
+                order: "1"
+              },
+              {
+                affiliation_id: "",
+                affiliation_name: "Independent Researcher",
+                author_id: "3192512793",
+                author_name: "Sergei Belousov",
+                order: "1"
+              }
+            ],
             publisher: 'Elsevier BV',
             year: '2021'
           },
@@ -138,6 +191,7 @@ export default {
   box-shadow: 0 2px 4px rgba(0, 0, 0, .08), 0 0 6px rgba(0, 0, 0, .04);
   background-color: white;
   width: 900px;
+  min-height: 550px;
   margin: 40px auto;
   padding: 30px 50px;
 }

@@ -16,7 +16,7 @@
           :cell-style='cellStyle'
           @cell-click="goClick">
         <el-table-column
-            prop="member_name"
+            prop="author_name"
             label="姓名"
             min-width="150">
         </el-table-column>
@@ -26,7 +26,7 @@
             min-width="200">
         </el-table-column>
         <el-table-column
-            prop="affiliation"
+            prop="affiliation_name"
             label="所在机构"
             min-width="180">
         </el-table-column>
@@ -71,34 +71,34 @@ export default {
 
       tableData: [
         {
-          member_id: 1,
-          member_name: 'Zehuan Huang',
+          author_id: 1,
+          author_name: 'Zehuan Huang',
           email: 'huangzehuan@buaa.edu.cn',
-          affiliation: 'Beihang University',
+          affiliation_name: 'Beihang University',
           accept_time: '2021/11/28 10:03',
           article_count: 200,
         },
         {
-          member_id: 2,
-          member_name: 'Yu Li',
+          author_id: 2,
+          author_name: 'Yu Li',
           email: 'liyu@buaa.edu.cn',
-          affiliation: 'Beihang University',
+          affiliation_name: 'Beihang University',
           accept_time: '2021/11/28 20:03',
           article_count: 200,
         },
         {
-          member_id: 3,
-          member_name: 'Qin Zhou',
+          author_id: 3,
+          author_name: 'Qin Zhou',
           email: 'zhouqin@buaa.edu.cn',
-          affiliation: 'Beihang University',
+          affiliation_name: 'Beihang University',
           accept_time: '2021/11/29 20:03',
           article_count: 200,
         },
         {
-          member_id: 4,
-          member_name: 'Qin Zhou',
+          author_id: 4,
+          author_name: 'Qin Zhou',
           email: 'zhouqin@buaa.edu.cn',
-          affiliation: 'Beihang University',
+          affiliation_name: 'Beihang University',
           accept_time: '2021/11/29 20:03',
           article_count: 200,
         }
@@ -107,12 +107,12 @@ export default {
   },
   methods: {
     // link
-    checkDetail(member_id) {
-      console.log(member_id);
+    checkDetail(author_id) {
+      console.log(author_id);
     },
     // table
     goClick(row) {
-      this.checkDetail(row.member_id);
+      this.checkDetail(row.author_id);
     },
     cellStyle(row) {
       if (row.column.label === '姓名')
