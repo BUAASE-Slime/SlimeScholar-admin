@@ -13,15 +13,18 @@
           :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
           stripe
           :header-cell-style="{'text-align':'center'}"
-          :cell-style='cellStyle'
-          @cell-click="goClick">
+          :cell-style='cellStyle'>
+<!--          @cell-click="goClick">-->
         <el-table-column
-            prop="author_name"
+            prop="real_name"
             label="姓名"
             min-width="150">
+          <template scope="scope">
+            <div @click="goClick(scope.row)">{{ scope.row.real_name }}</div>
+          </template>
         </el-table-column>
         <el-table-column
-            prop="email"
+            prop="work_email"
             label="邮箱"
             min-width="200">
         </el-table-column>
@@ -34,9 +37,12 @@
             prop="accept_time"
             label="入驻时间"
             min-width="150">
+          <template scope="scope">
+            <div>{{ timeFormatter(scope.row.accept_time) }}</div>
+          </template>
         </el-table-column>
         <el-table-column
-            prop="article_count"
+            prop="paper_count"
             label="发表文献数"
             min-width="100">
         </el-table-column>
@@ -57,8 +63,11 @@
 </template>
 
 <script>
+import commonApi from "@/utils/common";
+
 export default {
   name: "Member",
+  mixins: [ commonApi ],
   data() {
     return {
       memCount: 123,
@@ -72,35 +81,35 @@ export default {
       tableData: [
         {
           author_id: 1,
-          author_name: 'Zehuan Huang',
-          email: 'huangzehuan@buaa.edu.cn',
+          real_name: 'Zehuan Huang',
+          work_email: 'huangzehuan@buaa.edu.cn',
           affiliation_name: 'Beihang University',
           accept_time: '2021/11/28 10:03',
-          article_count: 200,
+          paper_count: 200,
         },
         {
           author_id: 2,
-          author_name: 'Yu Li',
-          email: 'liyu@buaa.edu.cn',
+          real_name: 'Yu Li',
+          work_email: 'liyu@buaa.edu.cn',
           affiliation_name: 'Beihang University',
           accept_time: '2021/11/28 20:03',
-          article_count: 200,
+          paper_count: 200,
         },
         {
           author_id: 3,
-          author_name: 'Qin Zhou',
-          email: 'zhouqin@buaa.edu.cn',
+          real_name: 'Qin Zhou',
+          work_email: 'zhouqin@buaa.edu.cn',
           affiliation_name: 'Beihang University',
           accept_time: '2021/11/29 20:03',
-          article_count: 200,
+          paper_count: 200,
         },
         {
           author_id: 4,
-          author_name: 'Qin Zhou',
-          email: 'zhouqin@buaa.edu.cn',
+          real_name: 'Qin Zhou',
+          work_email: 'zhouqin@buaa.edu.cn',
           affiliation_name: 'Beihang University',
           accept_time: '2021/11/29 20:03',
-          article_count: 200,
+          paper_count: 200,
         }
       ],
     }
@@ -108,7 +117,7 @@ export default {
   methods: {
     // link
     checkDetail(author_id) {
-      console.log(author_id);
+      window.open(this.GLOBAL.searchUrl + "/schPortal?v=" + author_id);
     },
     // table
     goClick(row) {
@@ -130,9 +139,32 @@ export default {
       console.log(`当前页: ${val}`);
       this.currentPage = val;
     },
+
+    timeFormatter(value) {
+      if (!value) return "";
+      return this.dateFormat(value, 'yyyy/MM/dd HH:mm');
+    }
   },
   created() {
-    this.memCount = this.memCount.toLocaleString();
+    const _form = new FormData();
+    _form.append("type", 1);
+    this.$axios({
+      data: _form,
+      method: 'post',
+      url: '/submit/list'
+    })
+    .then(res => {
+      this.loading = false;
+      if (res.data.success) {
+        this.tableData = res.data.submits;
+        this.memCount = this.tableData.length.toLocaleString();
+      } else {
+        this.$message.error("信息获取失败");
+      }
+    })
+    .catch(err => {
+      console.log(err);
+    })
   }
 }
 </script>

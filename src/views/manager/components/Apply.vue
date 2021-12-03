@@ -28,32 +28,39 @@
           :header-cell-style="{'text-align':'center'}"
           :cell-style='cellStyle'
           ref="multipleTable"
-          @cell-click="goClick"
           @selection-change="handleSelectionChange">
+<!--          @cell-click="goClick">-->
+
         <el-table-column
             type="selection"
             width="50">
         </el-table-column>
         <el-table-column
-            prop="author_name"
+            prop="real_name"
             label="姓名"
-            min-width="150">
+            min-width="120">
+          <template scope="scope">
+            <div @click="goClick(scope.row)">{{ scope.row.real_name }}</div>
+          </template>
         </el-table-column>
         <el-table-column
-            prop="email"
+            prop="work_email"
             label="邮箱"
             min-width="200">
         </el-table-column>
         <el-table-column
             prop="affiliation_name"
             label="所在机构"
-            min-width="180">
+            min-width="200">
         </el-table-column>
         <el-table-column
             prop="created_time"
             label="申请时间"
             min-width="150"
         >
+          <template scope="scope">
+            <div>{{ timeFormatter(scope.row.created_time) }}</div>
+          </template>
         </el-table-column>
         <el-table-column
             label="通过"
@@ -92,41 +99,47 @@
 </template>
 
 <script>
+import commonApi from "@/utils/common";
 export default {
   name: "Apply",
+  mixins: [ commonApi ],
   data() {
     return {
       // Table settings
-      loading: false,
+      loading: true,
       currentPage: 1,
       pageSize: 10,
       pageSizes: [7,10,15],
       tableData: [
         {
           submit_id: 1,
-          author_name: 'Zehuan Huang',
-          email: 'huangzehuan@buaa.edu.cn',
+          user_id: 2,
+          real_name: 'Zehuan Huang',
+          work_email: 'huangzehuan@buaa.edu.cn',
           affiliation_name: 'Beihang University',
           created_time: '2021/11/28 10:03'
         },
         {
           submit_id: 2,
-          author_name: 'Yu Li',
-          email: 'liyu@buaa.edu.cn',
+          user_id: 2,
+          real_name: 'Yu Li',
+          work_email: 'liyu@buaa.edu.cn',
           affiliation_name: 'Beihang University',
           created_time: '2021/11/28 20:03'
         },
         {
           submit_id: 3,
-          author_name: 'Qin Zhou',
-          email: 'zhouqin@buaa.edu.cn',
+          user_id: 2,
+          real_name: 'Qin Zhou',
+          work_email: 'zhouqin@buaa.edu.cn',
           affiliation_name: 'Beihang University',
           created_time: '2021/11/29 20:03'
         },
         {
           submit_id: 4,
-          author_name: 'Qin Zhou',
-          email: 'zhouqin@buaa.edu.cn',
+          user_id: 2,
+          real_name: 'Qin Zhou',
+          work_email: 'zhouqin@buaa.edu.cn',
           affiliation_name: 'Beihang University',
           created_time: '2021/11/29 20:03'
         }
@@ -135,20 +148,40 @@ export default {
     }
   },
   methods: {
+    check(index, success) {
+      const _form = new FormData();
+      _form.append("submit_id", this.tableData[index].submit_id);
+      _form.append("user_id", this.tableData[index].user_id);
+      _form.append("success", success);
+      _form.append("content", "");
+
+      this.$axios({
+        data: _form,
+        method: 'post',
+        url: '/submit/check'
+      })
+      .then(res => {
+        if (res.data.success) {
+          this.$message.success("操作成功");
+          this.tableData.splice(index, 1);
+        } else {
+          this.$message.error("操作失败");
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    },
     accept(index) {
-      console.log("accept " + this.tableData[index].author_name);
+      this.check(index, true);
     },
     refuse(index) {
-      console.log("refuse " + this.tableData[index].author_name);
-      this.$confirm('此操作将拒绝 ' + this.tableData[index].author_name + ' 的入驻申请, 是否继续?', '提示', {
+      this.$confirm('此操作将拒绝 ' + this.tableData[index].real_name + ' 的入驻申请, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
-        });
+        this.check(index, false);
       });
     },
     acceptAll() {
@@ -200,7 +233,32 @@ export default {
       console.log(`当前页: ${val}`);
       this.currentPage = val;
     },
-  }
+
+    timeFormatter(value) {
+      if (!value) return "";
+      return this.dateFormat(value, 'yyyy/MM/dd HH:mm');
+    }
+  },
+  created() {
+    const _form = new FormData();
+    _form.append("type", 0);
+    this.$axios({
+      data: _form,
+      method: 'post',
+      url: '/submit/list'
+    })
+    .then(res => {
+      this.loading = false;
+      if (res.data.success) {
+        this.tableData = res.data.submits;
+      } else {
+        this.$message.error("信息获取失败");
+      }
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  },
 }
 </script>
 

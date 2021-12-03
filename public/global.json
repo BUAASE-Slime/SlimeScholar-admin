@@ -1,5 +1,5 @@
 {
   "baseUrl": "frontend address",
-  "backUrl": "http://localhost:8000/api/v1/",
+  "backUrl": "http://82.156.217.192:8000/api/v1",
   "searchUrl": "https://zewan.cc"
 }
