@@ -14,7 +14,7 @@
             </el-menu-item>
             <el-menu-item index="2">
               <i class="el-icon-connection"></i>
-              <span slot="title">入驻申请</span>
+              <span slot="title">审核认领</span>
             </el-menu-item>
             <el-menu-item index="3">
               <i class="el-icon-user"></i>

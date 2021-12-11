@@ -10,9 +10,9 @@
             <el-tooltip class="item" effect="light" content="一键拒绝所选入驻申请" placement="top-start">
               <el-button plain icon="el-icon-circle-close" @click="refuseAll">一键拒绝</el-button>
             </el-tooltip>
-            <el-tooltip class="item" effect="light" content="筛选通过文献作者与申请人姓名相同的申请" placement="top-start">
-              <el-button plain icon="el-icon-view" @click="acceptCheck">筛选通过</el-button>
-            </el-tooltip>
+<!--            <el-tooltip class="item" effect="light" content="筛选通过文献作者与申请人姓名相同的申请" placement="top-start">-->
+<!--              <el-button plain icon="el-icon-view" @click="acceptCheck">筛选通过</el-button>-->
+<!--            </el-tooltip>-->
           </el-button-group>
         </el-col>
         <el-col span="12" style="text-align: right; padding-bottom: 12px; padding-top: 12px">
@@ -100,6 +100,7 @@
 
 <script>
 import commonApi from "@/utils/common";
+import qs from "qs";
 export default {
   name: "Apply",
   mixins: [ commonApi ],
@@ -149,16 +150,15 @@ export default {
   },
   methods: {
     check(index, success) {
-      const _form = new FormData();
-      _form.append("submit_id", this.tableData[index].submit_id);
-      _form.append("user_id", this.tableData[index].user_id);
-      _form.append("success", success);
-      _form.append("content", "");
-
       this.$axios({
-        data: _form,
         method: 'post',
-        url: '/submit/check'
+        url: '/submit/check',
+        data: qs.stringify({
+          submit_id: this.tableData[index].submit_id,
+          user_id: this.tableData[index].user_id,
+          success: success,
+          content: ''
+        })
       })
       .then(res => {
         if (res.data.success) {

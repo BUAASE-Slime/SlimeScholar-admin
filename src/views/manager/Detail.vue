@@ -14,14 +14,14 @@
               <i class="el-icon-user"></i>
               姓名
             </template>
-            {{ info.author_name }}
+            {{ info.real_name }}
           </el-descriptions-item>
           <el-descriptions-item>
             <template slot="label">
               <i class="el-icon-message"></i>
               邮箱地址
             </template>
-            {{ info.email }}
+            {{ info.work_email }}
           </el-descriptions-item>
           <el-descriptions-item>
             <template slot="label">
@@ -51,7 +51,10 @@
       <div class="left block-title">
         <span>
           <i class="el-icon-document"></i>
-          &nbsp;&nbsp;认领文献
+          &nbsp;&nbsp;
+          <el-tooltip effect="light" content="点击查看被认领门户详情" placement="right">
+            <span class="link-sch" @click="goSchPortal">认领门户</span>
+          </el-tooltip>
         </span>
       </div>
       <div class="articles">
@@ -70,7 +73,7 @@
                   <div class="author _info">
                     <span>
                       <span v-for="(aut, i) in article.authors">
-                        {{ aut.author_name }}
+                        {{ aut.real_name }}
                         <span v-if="i<article.authors.length-1"> / </span>
                       </span>
                       &nbsp;·&nbsp;{{ article.publisher }}&nbsp;·&nbsp;{{ article.year }}
@@ -91,11 +94,12 @@ export default {
   name: "Detail",
   data() {
     return {
-      apply_id: 'apply_id',
+      submit_id: 'submit_id',
 
       info: {
-        author_name: 'Zehuan Huang',
-        email: 'huangzehuan@buaa.edu.cn',
+        author_id: '12',
+        real_name: 'Zehuan Huang',
+        work_email: 'huangzehuan@buaa.edu.cn',
         affiliation_name: 'Beihang University',
         fields: ['Computer Vision', 'Computer Graphics'],
         homepage: 'https://blog.zewan.cc/',
@@ -108,14 +112,14 @@ export default {
                 affiliation_id: "",
                 affiliation_name: "Independent Researcher",
                 author_id: "3192512793",
-                author_name: "Sergei Belousov",
+                real_name: "Sergei Belousov",
                 order: "1"
               },
               {
                 affiliation_id: "",
                 affiliation_name: "Independent Researcher",
                 author_id: "3192512793",
-                author_name: "Sergei Belousov",
+                real_name: "Sergei Belousov",
                 order: "1"
               }
             ],
@@ -130,14 +134,14 @@ export default {
                 affiliation_id: "",
                 affiliation_name: "Independent Researcher",
                 author_id: "3192512793",
-                author_name: "Sergei Belousov",
+                real_name: "Sergei Belousov",
                 order: "1"
               },
               {
                 affiliation_id: "",
                 affiliation_name: "Independent Researcher",
                 author_id: "3192512793",
-                author_name: "Sergei Belousov",
+                real_name: "Sergei Belousov",
                 order: "1"
               }
             ],
@@ -152,14 +156,14 @@ export default {
                 affiliation_id: "",
                 affiliation_name: "Independent Researcher",
                 author_id: "3192512793",
-                author_name: "Sergei Belousov",
+                real_name: "Sergei Belousov",
                 order: "1"
               },
               {
                 affiliation_id: "",
                 affiliation_name: "Independent Researcher",
                 author_id: "3192512793",
-                author_name: "Sergei Belousov",
+                real_name: "Sergei Belousov",
                 order: "1"
               }
             ],
@@ -174,9 +178,12 @@ export default {
     toArticle: function(index) {
       window.open(this.GLOBAL.searchUrl + "/article?v=" + index);
     },
+    goSchPortal() {
+      window.open(this.GLOBAL.searchUrl + '/schPortal?v=' + this.info.author_id);
+    }
   },
   created() {
-    this.apply_id = this.$route.query.v;
+    this.submit_id = this.$route.query.v;
   }
 }
 </script>
@@ -200,6 +207,15 @@ export default {
   font-size: 23px;
   font-weight: bold;
   margin-bottom: 40px;
+}
+
+.detail .link-sch {
+  cursor: pointer;
+}
+
+.detail .link-sch:hover {
+  color: #1687fd;
+  text-decoration: underline #1687fd;
 }
 
 .detail .left {
