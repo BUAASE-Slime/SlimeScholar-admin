@@ -84,10 +84,27 @@ export default {
     }
   },
   created() {
-    this.info.userCount = this.info.userCount.toLocaleString();
-    this.info.literCount = this.info.literCount.toLocaleString();
-    this.info.authorCount = this.info.authorCount.toLocaleString();
-    this.info.memberCount = this.info.memberCount.toLocaleString();
+    this.$axios({
+      method: 'post',
+      url: '/submit/count'
+    })
+    .then(res => {
+      switch (res.data.status) {
+        case 200:
+          this.info = res.data.data;
+          this.info.userCount = this.info.userCount.toLocaleString();
+          this.info.literCount = this.info.literCount.toLocaleString();
+          this.info.authorCount = this.info.authorCount.toLocaleString();
+          this.info.memberCount = this.info.memberCount.toLocaleString();
+          break;
+        default:
+          this.$message.error("获取信息失败！");
+          break;
+      }
+    })
+    .catch(err => {
+      console.log(err);
+    })
   },
   mounted() {
     //页面加载完成后,才执行
