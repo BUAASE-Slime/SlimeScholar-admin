@@ -35,7 +35,8 @@
               <i class="el-icon-paperclip"></i>
               首页（可选）
             </template>
-            {{ info.homepage }}
+            <span style="color: #2d94d4; text-decoration: underline; cursor: pointer"
+                  @click="tolink(info.homepage)">{{ info.homepage }}</span>
           </el-descriptions-item>
           <el-descriptions-item>
             <template slot="label">
@@ -73,7 +74,7 @@
                   <div class="author _info">
                     <span>
                       <span v-for="(aut, i) in article.authors">
-                        {{ aut.real_name }}
+                        {{ aut.author_name }}
                         <span v-if="i<article.authors.length-1"> / </span>
                       </span>
                       &nbsp;·&nbsp;{{ article.publisher }}&nbsp;·&nbsp;{{ article.year }}
@@ -90,6 +91,8 @@
 </template>
 
 <script>
+import qs from "qs";
+
 export default {
   name: "Detail",
   data() {
@@ -112,14 +115,14 @@ export default {
                 affiliation_id: "",
                 affiliation_name: "Independent Researcher",
                 author_id: "3192512793",
-                real_name: "Sergei Belousov",
+                author_name: "Sergei Belousov",
                 order: "1"
               },
               {
                 affiliation_id: "",
                 affiliation_name: "Independent Researcher",
                 author_id: "3192512793",
-                real_name: "Sergei Belousov",
+                author_name: "Sergei Belousov",
                 order: "1"
               }
             ],
@@ -134,14 +137,14 @@ export default {
                 affiliation_id: "",
                 affiliation_name: "Independent Researcher",
                 author_id: "3192512793",
-                real_name: "Sergei Belousov",
+                author_name: "Sergei Belousov",
                 order: "1"
               },
               {
                 affiliation_id: "",
                 affiliation_name: "Independent Researcher",
                 author_id: "3192512793",
-                real_name: "Sergei Belousov",
+                author_name: "Sergei Belousov",
                 order: "1"
               }
             ],
@@ -156,14 +159,14 @@ export default {
                 affiliation_id: "",
                 affiliation_name: "Independent Researcher",
                 author_id: "3192512793",
-                real_name: "Sergei Belousov",
+                author_name: "Sergei Belousov",
                 order: "1"
               },
               {
                 affiliation_id: "",
                 affiliation_name: "Independent Researcher",
                 author_id: "3192512793",
-                real_name: "Sergei Belousov",
+                author_name: "Sergei Belousov",
                 order: "1"
               }
             ],
@@ -180,10 +183,33 @@ export default {
     },
     goSchPortal() {
       window.open(this.GLOBAL.searchUrl + '/schPortal?v=' + this.info.author_id);
+    },
+    tolink(url) {
+      window.open(url);
     }
   },
   created() {
     this.submit_id = this.$route.query.v;
+    this.$axios({
+      method: 'post',
+      url: '/submit/get/detail',
+      data: qs.stringify({
+        submit_id: this.submit_id
+      })
+    })
+    .then(res => {
+      switch (res.data.status) {
+        case 200:
+          this.info = res.data.data;
+          break;
+        default:
+          this.$message.error("获取失败！");
+          break;
+      }
+    })
+    .catch(err => {
+      console.log(err);
+    })
   }
 }
 </script>
@@ -211,6 +237,7 @@ export default {
 
 .detail .link-sch {
   cursor: pointer;
+  text-decoration: underline;
 }
 
 .detail .link-sch:hover {
