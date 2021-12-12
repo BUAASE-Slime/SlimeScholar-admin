@@ -95,6 +95,23 @@
                      v-if="!loading">
       </el-pagination>
     </div>
+
+    <el-dialog title="确认信息" :visible.sync="dialogFormVisible" width="40%">
+      <el-form ref="confirmForm" :model="confirmForm" label-width="90px">
+        <el-form-item :label="formTitle">
+          <el-input type="textarea"
+                    placeholder="请输入操作原因或说明"
+                    maxlength="300"
+                    show-word-limit
+                    rows="3"
+                    v-model="confirmForm.content"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="checkEvent">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -106,8 +123,13 @@ export default {
   mixins: [ commonApi ],
   data() {
     return {
+      dialogFormVisible: false,
+      confirmForm: {
+        content: ''
+      },
+      formTitle: '',
       // Table settings
-      loading: true,
+      loading: false,
       currentPage: 1,
       pageSize: 10,
       pageSizes: [7,10,15],
@@ -146,24 +168,57 @@ export default {
         }
       ],
       multipleSelection: [],
+      checkIndex: 0,
+      checkIds: '',
+      success: true,
+      isAll: false,
     }
   },
   methods: {
-    check(index, success) {
+    getInfo() {
+      this.loading = true;
+      this.$axios({
+        method: 'post',
+        url: '/submit/list',
+        data: qs.stringify({
+          type: 0
+        })
+      })
+      .then(res => {
+        this.loading = false;
+        if (res.data.success) {
+          this.tableData = res.data.submits;
+        } else {
+          this.$message.error("信息获取失败");
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    },
+    getTitle(success) {
+      return success === true? '通过说明' : '拒绝原因';
+    },
+    checkEvent() {
+      if (this.isAll) this.checkAll();
+      else this.check();
+    },
+    check() {
       this.$axios({
         method: 'post',
         url: '/submit/check',
         data: qs.stringify({
-          submit_id: this.tableData[index].submit_id,
-          user_id: this.tableData[index].user_id,
-          success: success,
-          content: ''
+          submit_id: this.tableData[this.checkIndex].submit_id,
+          user_id: this.tableData[this.checkIndex].user_id,
+          success: this.success,
+          content: this.confirmForm.content
         })
       })
       .then(res => {
         if (res.data.success) {
           this.$message.success("操作成功");
-          this.tableData.splice(index, 1);
+          this.dialogFormVisible = false;
+          this.tableData.splice(this.checkIndex, 1);
         } else {
           this.$message.error("操作失败");
         }
@@ -173,34 +228,70 @@ export default {
       })
     },
     accept(index) {
-      this.check(index, true);
+      this.checkIndex = index;
+      this.isAll = false;
+      this.formTitle = this.getTitle(true);
+      this.dialogFormVisible = true;
+      this.success = true;
     },
     refuse(index) {
-      this.$confirm('此操作将拒绝 ' + this.tableData[index].real_name + ' 的入驻申请, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.check(index, false);
-      });
+      this.checkIndex = index;
+      this.isAll = false;
+      this.formTitle = this.getTitle(false);
+      this.dialogFormVisible = true;
+      this.success = false;
+    },
+    checkAll() {
+      this.$axios({
+        method: 'post',
+        url: '/submit/check/more',
+        data: qs.stringify({
+          submit_ids: this.checkIds,
+          success: this.success,
+          content: this.confirmForm.content
+        })
+      })
+      .then(res => {
+        switch (res.data.status) {
+          case 200:
+            this.$message.success("操作成功");
+            this.dialogFormVisible = false;
+            this.getInfo();
+            break;
+          case 406:
+            this.$message.warning("没有需要审批的申请");
+            break;
+          default:
+            this.$message.error("操作失败！");
+            break;
+        }
+      })
     },
     acceptAll() {
-
-    },
-    acceptCheck() {
-
+      if (this.multipleSelection.length === 0) {
+        this.$message.warning("请至少选择下列表格中的一项");
+        return;
+      }
+      this.checkIds = '';
+      for (let i = 0; i < this.multipleSelection.length; i++)
+        this.checkIds += this.multipleSelection[i].submit_id + ",";
+      this.isAll = true;
+      this.formTitle = this.getTitle(true);
+      this.dialogFormVisible = true;
+      this.success = true;
     },
     refuseAll() {
-      this.$confirm('此操作将拒绝所选申请, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
-        });
-      });
+      if (this.multipleSelection.length === 0) {
+        this.$message.warning("请至少选择下列表格中的一项");
+        return;
+      }
+      this.checkIds = '';
+      for (let i = 0; i < this.multipleSelection.length; i++)
+        this.checkIds += this.multipleSelection[i].submit_id + ",";
+      this.isAll = true;
+      this.formTitle = this.getTitle(false);
+      this.dialogFormVisible = true;
+      this.success = false;
     },
     // link
     checkDetail(submit_id) {
@@ -240,24 +331,7 @@ export default {
     }
   },
   created() {
-    const _form = new FormData();
-    _form.append("type", 0);
-    this.$axios({
-      data: _form,
-      method: 'post',
-      url: '/submit/list'
-    })
-    .then(res => {
-      this.loading = false;
-      if (res.data.success) {
-        this.tableData = res.data.submits;
-      } else {
-        this.$message.error("信息获取失败");
-      }
-    })
-    .catch(err => {
-      console.log(err);
-    })
+    this.getInfo();
   },
 }
 </script>
