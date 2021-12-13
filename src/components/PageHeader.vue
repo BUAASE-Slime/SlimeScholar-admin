@@ -47,7 +47,7 @@ export default {
     return {
       userName: 'admin',
       activeIndex: '1',
-      isLogin: true,
+      isLogin: false,
 
       dialogFormVisible: false,
       form: {
@@ -80,24 +80,11 @@ export default {
       this.$router.push('/user');
     },
     logout() {
-      this.$axios({
-        method: 'get',
-        url: '/user/logout',
-      })
-      .then(res => {
-        switch (res.data.status_code) {
-          case 200:
-            this.$store.dispatch('clear');
-            location.reload();
-            break;
-          case 401:
-            this.$message.error('未检测到登录信息！');
-            break;
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      })
+      this.$store.dispatch('clear');
+      this.$message.success("退出成功！");
+      setTimeout(() => {
+        location.reload();
+      }, 1000);
     },
 
     clearPasswordForm() {

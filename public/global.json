@@ -1,5 +1,5 @@
 {
-  "baseUrl": "frontend address",
-  "backUrl": "http://82.156.217.192:8000/api/v1",
-  "searchUrl": "https://zewan.cc"
+  "baseUrl": "https://admin.matrix53.top",
+  "backUrl": "https://slime.matrix53.top/api/v1",
+  "searchUrl": "https://slime.matrix53.top"
 }

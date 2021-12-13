@@ -49,7 +49,7 @@ export default {
       formData.append("password", this.form.password);
       this.$axios({
         method: 'post',
-        url: '/user/login',
+        url: '/submit/login',
         data: formData,
       })
       .then(res => {
@@ -62,16 +62,11 @@ export default {
               'userId': res.data.detail.user_id
             }
           });
-          const history_pth = localStorage.getItem('preRoute');
           setTimeout(() => {
-            if (history_pth == null || history_pth === '/register') {
-              this.$router.push('/');
-            } else {
-              this.$router.push({ path: history_pth });
-            }
+            this.$router.push('/');
           }, 1000);
         } else {
-          this.$message.error("用户名或密码错误");
+          this.$message.error("权限不足！");
         }
       })
       .catch(err => {

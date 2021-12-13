@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-// import user from "@/store/user";
+import user from "@/store/user";
 
 Vue.use(VueRouter)
 
@@ -11,9 +11,12 @@ const routes = [
     component: () => import('../views/manager/Center')
   },
   {
-    path: '/user',
+    path: '/login',
     name: 'Login',
     component: () => import('../views/user/Login'),
+    meta: {
+      noNav: true,
+    }
   },
   {
     path: '/apply_detail',
@@ -29,18 +32,13 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  // const userInfo = user.getters.getUser(user.state());
-  // console.log(userInfo.user.Authorization);
-  // Record the router address of page accessed before user
-  // if (to.path === '/login') {
-    // localStorage.setItem("preRoute", router.currentRoute.fullPath);
-  // }
+  const userInfo = user.getters.getUser(user.state());
   // Login is required to access the following pages
-  // if (!userInfo) {
-  //   next({
-  //     name: 'Login',
-  //   })
-  // }
+  if (!userInfo && to.path !== '/login') {
+    next({
+      name: 'Login',
+    })
+  }
   next()
 })
 
