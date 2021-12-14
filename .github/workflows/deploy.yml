@@ -26,8 +26,8 @@ jobs:
       - name: transfer
         uses: garygrossgarten/github-action-scp@release
         with:
-          local: ${{github.workspace}}/build
-          remote: ${{secrets.SERVER_DST_FOLDER}}/build
+          local: ${{github.workspace}}/dist
+          remote: ${{secrets.SERVER_DST_FOLDER}}/front-end
           host: ${{secrets.SERVER_IP}}
           username: ${{secrets.SERVER_USERNAME}}
           password: ${{secrets.SERVER_PASSWORD}}
