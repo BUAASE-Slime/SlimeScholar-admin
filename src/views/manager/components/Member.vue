@@ -148,6 +148,7 @@ export default {
   created() {
     const _form = new FormData();
     _form.append("type", 1);
+    this.loading = true;
     this.$axios({
       data: _form,
       method: 'post',
