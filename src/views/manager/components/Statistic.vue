@@ -96,6 +96,13 @@ export default {
           this.info.literCount = this.info.literCount.toLocaleString();
           this.info.authorCount = this.info.authorCount.toLocaleString();
           this.info.memberCount = this.info.memberCount.toLocaleString();
+
+          //页面加载完成后,才执行
+          setTimeout(() => {
+            this.showTimeChart();
+            this.showActiveChart();
+          }, 1000);
+
           break;
         default:
           this.$message.error("获取信息失败！");
@@ -105,13 +112,6 @@ export default {
     .catch(err => {
       console.log(err);
     })
-  },
-  mounted() {
-    //页面加载完成后,才执行
-    setTimeout(() => {
-      this.showTimeChart();
-      this.showActiveChart();
-    }, 1000);
   },
   methods: {
     gotoMem() {
