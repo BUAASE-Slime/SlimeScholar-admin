@@ -24,7 +24,9 @@
           <div class="left">
             <span class="title">
               <i class="el-icon-odometer"></i>
-              &nbsp;&nbsp;平均响应时间
+              &nbsp;&nbsp;<el-tooltip class="item" effect="light" content="近一百次请求的平均响应时间" placement="top">
+                  <span>平均响应时间</span>
+                </el-tooltip>
             </span>
           </div>
           <div id="time-chart" style="width: 400px; height: 400px;"></div>
@@ -36,7 +38,9 @@
             <div class="left">
               <span class="title">
                 <i class="el-icon-data-line"></i>
-                &nbsp;&nbsp;平台活跃指数
+                &nbsp;&nbsp;<el-tooltip class="item" effect="light" content="每天的请求（响应）次数" placement="top">
+                    <span>平台活跃指数</span>
+                  </el-tooltip>
               </span>
             </div>
             <div id="active-chart" style="width: 400px; height: 370px;"></div>
